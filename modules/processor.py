@@ -108,7 +108,7 @@ def processar_planilha(uploaded_file, codigo_empresa, usuario):
        if any(termo in col_normalizada for termo in ['longitude', 'lon', 'long']):
            col_longitude = col
 
-    with st.expander("Ver colunas detectadas no arquivo"):
+    with st.expander("Ver colunas detectadas no arquivo:"):
         colunas_formatadas = ", ".join([f"`{col}`" for col in df.columns.tolist()])
         st.markdown(colunas_formatadas)
 
@@ -191,7 +191,7 @@ def planilha_editor(usuario):
                     st.write(f"### Pré-visualização: {uploaded_file.name}")
                     st.dataframe(novo_df.head(10))
                 except Exception as e:
-                    st.error(f"Erro ao processar {uploaded_file.name}: {str(e)}")
+                    st.error(f"Erro ao processar {uploaded_file.name}")
 
             progresso.progress(1.0)
             if resultados:
