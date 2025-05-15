@@ -47,9 +47,6 @@ def formatar_placa(placa):
     if re.match(r'^[A-Z]{3}[0-9][A-Z][0-9]{2}$', placa):
         return placa
     return placa
-    if re.match(r'^[A-Z]{3}[0-9][A-Z][0-9]{2}$', placa):
-        return placa
-    return placa
 
 def registrar_edicao_planilha(usuario, nome_planilha):
     dados = carregar_dados()
