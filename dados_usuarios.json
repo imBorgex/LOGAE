@@ -1,0 +1,17 @@
+{
+    "usuario_atual": {
+        "id": "admin",
+        "nome": "admin",
+        "role": "admin"
+    },
+    "usuarios": {
+        "admin": {
+            "senha": "admin123",
+            "nivel": "admin",
+            "historico": [
+            ]
+        }
+    },
+    "planilhas_editadas": [],
+    "historico_downloads": []
+}
