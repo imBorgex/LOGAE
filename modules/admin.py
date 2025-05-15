@@ -61,10 +61,10 @@ def painel_administrador():
                     historico_formatado.append({"data": partes[0], "acao": partes[1]})
         if historico_formatado:
             df_hist = pd.DataFrame(historico_formatado)
-            if not df_hist.empty:
-                df_hist = df_hist.sort_values("data", ascending=False)
-                st.dataframe(df_hist)
-            else:
-                st.info("Nenhum dado registrado para este usuário.")
+            df_hist["data"] = df_hist["data"].astype(str)
+            df_hist["acao"] = df_hist["acao"].astype(str)
+            df_hist = df_hist.sort_values("data", ascending=False)
+            df_hist = df_hist[["acao", "data"]]
+            st.dataframe(df_hist)
         else:
             st.info("Nenhum histórico disponível para este usuário.")

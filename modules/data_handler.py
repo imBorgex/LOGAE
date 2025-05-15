@@ -48,3 +48,22 @@ def salvar_dados(dados):
         return True
     except:
         return False
+def adicionar_ao_historico(usuario, acao):
+    """Adiciona uma entrada ao histórico do usuário com data e ação"""
+    try:
+        dados = carregar_dados()
+        if "usuarios" in dados and usuario in dados["usuarios"]:
+            if "historico" not in dados["usuarios"][usuario]:
+                dados["usuarios"][usuario]["historico"] = []
+
+            dados["usuarios"][usuario]["historico"].append({
+                "acao": acao,
+                "data": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+            })
+
+            salvar_dados(dados)
+            return True
+        return False
+    except Exception as e:
+        st.error(f"Erro ao adicionar ao histórico: {e}")
+        return False

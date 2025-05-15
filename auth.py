@@ -14,15 +14,25 @@ def verificar_login(usuario, senha):
     return False, None
 
 def adicionar_ao_historico(usuario, acao):
-    dados = carregar_dados()
-    if usuario in dados["usuarios"]:
+    try:
+        dados = carregar_dados()
+        st.write("DADOS ANTES:", dados["usuarios"][usuario]["historico"])  # <-- DEBUG
+
         if "historico" not in dados["usuarios"][usuario]:
             dados["usuarios"][usuario]["historico"] = []
+
         dados["usuarios"][usuario]["historico"].append({
             "acao": acao,
-            "data": st.session_state.get("data_atual", "") or ""
+            "data": datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         })
+
         salvar_dados(dados)
+        st.write("DADOS DEPOIS:", dados["usuarios"][usuario]["historico"])  # <-- DEBUG
+        return True
+    except Exception as e:
+        st.error(f"Erro ao adicionar ao histórico: {e}")
+        return False
+
 
 def login_screen():
     st.subheader("Login")

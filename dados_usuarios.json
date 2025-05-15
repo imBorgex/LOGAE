@@ -9,9 +9,31 @@
             "senha": "admin123",
             "nivel": "admin",
             "historico": [
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha ABC1B23  (teste).xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                }
             ]
         }
     },
-    "planilhas_editadas": [],
+    "planilhas_editadas": [
+        {
+            "data": "2025-05-15T08:26:29.045749",
+            "usuario": "admin",
+            "planilha": "ABC1B23  (teste).xlsx"
+        }
+    ],
     "historico_downloads": []
 }
