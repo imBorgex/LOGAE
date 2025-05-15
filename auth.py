@@ -1,5 +1,6 @@
 import streamlit as st
 from modules.data_handler import carregar_dados, salvar_dados
+from datetime import datetime
 
 def verificar_login(usuario, senha):
     dados = carregar_dados()
@@ -16,7 +17,7 @@ def verificar_login(usuario, senha):
 def adicionar_ao_historico(usuario, acao):
     try:
         dados = carregar_dados()
-        st.write("DADOS ANTES:", dados["usuarios"][usuario]["historico"])  # <-- DEBUG
+        st.write("DADOS ANTES:", dados["usuarios"][usuario]["historico"]) 
 
         if "historico" not in dados["usuarios"][usuario]:
             dados["usuarios"][usuario]["historico"] = []
@@ -27,7 +28,7 @@ def adicionar_ao_historico(usuario, acao):
         })
 
         salvar_dados(dados)
-        st.write("DADOS DEPOIS:", dados["usuarios"][usuario]["historico"])  # <-- DEBUG
+        st.write("DADOS DEPOIS:", dados["usuarios"][usuario]["historico"]) 
         return True
     except Exception as e:
         st.error(f"Erro ao adicionar ao histórico: {e}")
