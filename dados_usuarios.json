@@ -9,6 +9,10 @@
             "senha": "admin123",
             "nivel": "admin",
             "historico": [
+                {
+                    "acao": "Login",
+                    "data": ""
+                }
             ]
         }
     },

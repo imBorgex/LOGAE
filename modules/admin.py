@@ -41,7 +41,7 @@ def painel_administrador():
             with st.form("editar_form"):
                 nova_senha = st.text_input("Nova Senha", type="password")
                 novo_nivel = st.selectbox("Novo Nível", ["padrao", "admin"], index=["padrao", "admin"].index(usuarios[selecionado]["nivel"]))
-                if st.form_submit_button("Salvar Alteracoes"):
+                if st.form_submit_button("Salvar Alterações"):
                     if nova_senha:
                         dados["usuarios"][selecionado]["senha"] = nova_senha
                     dados["usuarios"][selecionado]["nivel"] = novo_nivel
