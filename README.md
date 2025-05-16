@@ -11,7 +11,8 @@ Fluxo do Sistema de planilhas - Logae
   - A ação de login é registrada no histórico do usuário.
 
 3. Interface e Navegação (app.py)
-    Após login:
+
+   Após login:
   - Usuário padrão vê apenas o "Editor de Planilhas".
   - Admin vê "Editor de Planilhas", "Dashboard" e "Gerenciar Usuários".
 
@@ -24,13 +25,15 @@ Fluxo do Sistema de planilhas - Logae
 
 5. Dashboard (analytics.py)
   -Visível apenas para administradores.
-    Exibe:
+
+   Exibe:
   - Gráfico de edições por mês.
   - Gráfico de edições por usuário.
 Além de um botão pra limpar o histórico de edições
 
 6. Gerenciamento de Usuários (admin.py)
-    Admin pode:
+
+   Admin pode:
   - Criar, editar e remover usuários.
   - Visualizar histórico de ações de cada usuário.
 
