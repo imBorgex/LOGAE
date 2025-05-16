@@ -25,7 +25,7 @@ Fluxo do Sistema de planilhas - Logae
 
 5. Dashboard (analytics.py)
 
-   -Visível apenas para administradores.
+  - Visível apenas para administradores.
 
    Exibe:
   - Gráfico de edições por mês.
