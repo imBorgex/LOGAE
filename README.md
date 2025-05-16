@@ -38,7 +38,8 @@ Além de um botão pra limpar o histórico de edições
   - Visualizar histórico de ações de cada usuário.
 
 7. Armazenamento de Dados (data_handler.py + dados_usuarios.json)
-    Todos os dados abaixo são salvos no arquivo dados_usuarios.json:
+
+   Todos os dados abaixo são salvos no arquivo dados_usuarios.json:
   - Usuários, níveis e histórico.
   - Planilhas editadas.
   - Downloads realizados.
