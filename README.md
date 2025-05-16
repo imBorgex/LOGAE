@@ -24,7 +24,8 @@ Fluxo do Sistema de planilhas - Logae
   - As ações de edição e download são registradas no JSON.
 
 5. Dashboard (analytics.py)
-  -Visível apenas para administradores.
+
+   -Visível apenas para administradores.
 
    Exibe:
   - Gráfico de edições por mês.
