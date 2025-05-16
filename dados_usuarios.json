@@ -9,68 +9,10 @@
             "senha": "admin123",
             "nivel": "admin",
             "historico": [
-                {
-                    "acao": "Login",
-                    "data": ""
-                },
-                {
-                    "acao": "Editou a planilha ABC1B23  (teste).xlsx com c\u00f3digo da empresa 12345",
-                    "data": ""
-                },
-                {
-                    "acao": "Editou a planilha ABC1D23 (teste).xlsx com c\u00f3digo da empresa 12345",
-                    "data": ""
-                },
-                {
-                    "acao": "Editou a planilha Planilha sem Placa.xlsx com c\u00f3digo da empresa 12345",
-                    "data": ""
-                },
-                {
-                    "acao": "Editou a planilha Planilha sem Placa.xlsx com c\u00f3digo da empresa 12345",
-                    "data": ""
-                },
-                {
-                    "acao": "Editou a planilha Planilha sem Placa.xlsx com c\u00f3digo da empresa 12345",
-                    "data": ""
-                },
-                {
-                    "acao": "Editou a planilha Planilha sem Placa.xlsx com c\u00f3digo da empresa 12345",
-                    "data": ""
-                }
             ]
         }
     },
     "planilhas_editadas": [
-        {
-            "data": "2025-05-15T18:07:46.125032",
-            "usuario": "admin",
-            "planilha": "ABC1B23  (teste).xlsx"
-        },
-        {
-            "data": "2025-05-15T18:07:48.702462",
-            "usuario": "admin",
-            "planilha": "ABC1D23 (teste).xlsx"
-        },
-        {
-            "data": "2025-05-15T18:08:13.413394",
-            "usuario": "admin",
-            "planilha": "Planilha sem Placa.xlsx"
-        },
-        {
-            "data": "2025-05-15T18:13:44.163317",
-            "usuario": "admin",
-            "planilha": "Planilha sem Placa.xlsx"
-        },
-        {
-            "data": "2025-05-15T18:15:19.841084",
-            "usuario": "admin",
-            "planilha": "Planilha sem Placa.xlsx"
-        },
-        {
-            "data": "2025-05-15T18:16:20.094131",
-            "usuario": "admin",
-            "planilha": "Planilha sem Placa.xlsx"
-        }
     ],
     "historico_downloads": []
 }
