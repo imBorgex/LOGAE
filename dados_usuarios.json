@@ -9,6 +9,14 @@
             "senha": "admin123",
             "nivel": "admin",
             "historico": [
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha ABC1B23  (teste).xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                }
             ]
         }
     },
