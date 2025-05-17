@@ -8,9 +8,269 @@
         "admin": {
             "senha": "admin123",
             "nivel": "admin",
-            "historico": []
+            "historico": [
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha ABC1D23 (teste).xlsx com c\u00f3digo da empresa 1245",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha Planilha sem Placa.xlsx com c\u00f3digo da empresa 1234",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha TESTE 1.xlsx com c\u00f3digo da empresa 8465",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha SUT9A26.xls com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha SUT9A26.xls com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha placa DTE1293 dias 26 a 29.08.xls com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha SUJ1B58 - LOGATTO 24-04 AT\u00c9 02-05.csv com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha SUJ1B58 - LOGATTO 24-04 AT\u00c9 02-05.csv com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha LogPos_RYH3I15.xls com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha SUJ1B58 - LOGATTO 24-04 AT\u00c9 02-05.csv com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha LogPos_RYH3I15.xls com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha JOSE TACONI DA SILVA.csv com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha RELATORIO (1).csv com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha JOSE TACONI DA SILVA.csv com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha JOSE TACONI DA SILVA.csv com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha JOSE TACONI DA SILVA.csv com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha ABC1D23 (teste).xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha ABC1B23  (teste).xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha relatorio - 2025-04-24-14T163125.618.xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha relatorio - 2025-04-24-14T163125.618 (1).xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha relatorio - 2025-04-24-14T163125.618 (1).xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha relatorio - 2025-04-24-14T163125.618 (1).xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                },
+                {
+                    "acao": "Login",
+                    "data": ""
+                },
+                {
+                    "acao": "Editou a planilha relatorio - 2025-04-24-14T163125.618 (1).xlsx com c\u00f3digo da empresa 12345",
+                    "data": ""
+                }
+            ]
+        },
+        "usuario": {
+            "senha": "1234",
+            "nivel": "padrao",
+            "historico": [
+                {
+                    "acao": "Login",
+                    "data": ""
+                }
+            ]
         }
     },
-    "planilhas_editadas": [],
+    "planilhas_editadas": [
+        {
+            "data": "2025-05-16T14:04:08.887889",
+            "usuario": "admin",
+            "planilha": "Planilha sem Placa.xlsx"
+        },
+        {
+            "data": "2025-05-16T14:18:12.234762",
+            "usuario": "admin",
+            "planilha": "TESTE 1.xlsx"
+        },
+        {
+            "data": "2025-05-16T14:34:29.937030",
+            "usuario": "admin",
+            "planilha": "SUT9A26.xls"
+        },
+        {
+            "data": "2025-05-16T14:34:48.013001",
+            "usuario": "admin",
+            "planilha": "SUT9A26.xls"
+        },
+        {
+            "data": "2025-05-16T14:34:56.048820",
+            "usuario": "admin",
+            "planilha": "SUT9A26.xls"
+        },
+        {
+            "data": "2025-05-16T14:35:26.091741",
+            "usuario": "admin",
+            "planilha": "SUT9A26.xls"
+        },
+        {
+            "data": "2025-05-16T14:38:22.600239",
+            "usuario": "admin",
+            "planilha": "placa DTE1293 dias 26 a 29.08.xls"
+        },
+        {
+            "data": "2025-05-16T14:44:37.525298",
+            "usuario": "admin",
+            "planilha": "SUJ1B58 - LOGATTO 24-04 AT\u00c9 02-05.csv"
+        },
+        {
+            "data": "2025-05-16T14:44:44.105167",
+            "usuario": "admin",
+            "planilha": "SUJ1B58 - LOGATTO 24-04 AT\u00c9 02-05.csv"
+        },
+        {
+            "data": "2025-05-16T15:22:50.156841",
+            "usuario": "admin",
+            "planilha": "LogPos_RYH3I15.xls"
+        },
+        {
+            "data": "2025-05-16T15:24:49.592874",
+            "usuario": "admin",
+            "planilha": "SUJ1B58 - LOGATTO 24-04 AT\u00c9 02-05.csv"
+        },
+        {
+            "data": "2025-05-16T15:26:05.346478",
+            "usuario": "admin",
+            "planilha": "LogPos_RYH3I15.xls"
+        },
+        {
+            "data": "2025-05-16T16:21:17.648341",
+            "usuario": "admin",
+            "planilha": "JOSE TACONI DA SILVA.csv"
+        },
+        {
+            "data": "2025-05-16T16:30:09.007123",
+            "usuario": "admin",
+            "planilha": "RELATORIO (1).csv"
+        },
+        {
+            "data": "2025-05-16T16:37:46.025010",
+            "usuario": "admin",
+            "planilha": "JOSE TACONI DA SILVA.csv"
+        },
+        {
+            "data": "2025-05-16T16:41:06.796325",
+            "usuario": "admin",
+            "planilha": "JOSE TACONI DA SILVA.csv"
+        },
+        {
+            "data": "2025-05-16T16:46:57.534593",
+            "usuario": "admin",
+            "planilha": "JOSE TACONI DA SILVA.csv"
+        },
+        {
+            "data": "2025-05-16T23:09:41.765011",
+            "usuario": "admin",
+            "planilha": "ABC1D23 (teste).xlsx"
+        },
+        {
+            "data": "2025-05-16T23:10:09.024567",
+            "usuario": "admin",
+            "planilha": "ABC1B23  (teste).xlsx"
+        },
+        {
+            "data": "2025-05-16T23:12:33.473316",
+            "usuario": "admin",
+            "planilha": "relatorio - 2025-04-24-14T163125.618.xlsx"
+        },
+        {
+            "data": "2025-05-16T23:14:04.717494",
+            "usuario": "admin",
+            "planilha": "relatorio - 2025-04-24-14T163125.618 (1).xlsx"
+        },
+        {
+            "data": "2025-05-16T23:21:24.586490",
+            "usuario": "admin",
+            "planilha": "relatorio - 2025-04-24-14T163125.618 (1).xlsx"
+        },
+        {
+            "data": "2025-05-16T23:28:01.363682",
+            "usuario": "admin",
+            "planilha": "relatorio - 2025-04-24-14T163125.618 (1).xlsx"
+        },
+        {
+            "data": "2025-05-16T23:34:15.597751",
+            "usuario": "admin",
+            "planilha": "relatorio - 2025-04-24-14T163125.618 (1).xlsx"
+        }
+    ],
     "historico_downloads": []
 }

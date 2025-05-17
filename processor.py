@@ -1,3 +1,4 @@
+
 import streamlit as st
 import pandas as pd
 import io
@@ -17,7 +18,7 @@ def formatar_data(data_str):
         return data_obj.strftime("%Y-%m-%d %H:%M")
     except ValueError:
         try:
-            data_obj = datetime.strptime(data_limpa, "%d/%m/%Y %H:%M:%S")
+            data_obj = datetime.strptime(data_limpa, "%Y-%m-%d %H:%M:%S")
             return data_obj.strftime("%Y-%m-%d %H:%M")
         except ValueError:
             return data_limpa
@@ -71,108 +72,57 @@ def registrar_download_planilha(usuario, nome_planilha):
     salvar_dados(dados)
 
 def processar_planilha(uploaded_file, codigo_empresa, usuario):
-    """Processa a planilha carregada"""
-    extensao = os.path.splitext(uploaded_file.name)[1].lower()
-    if extensao == '.csv':
-        try:
-            df = pd.read_csv(uploaded_file, encoding='utf-8', dtype=str, decimal='.')
-        except Exception:
-            uploaded_file.seek(0)
-            try:
-                df = pd.read_csv(uploaded_file, encoding='latin1', dtype=str, decimal='.')
-            except Exception:
-                uploaded_file.seek(0)
-                df = pd.read_csv(uploaded_file, encoding='iso-8859-1', dtype=str, decimal='.')
-    else:
-        df = pd.read_excel(uploaded_file, dtype=str, sheet_name=0, decimal='.')
-        
-    novo_df = pd.DataFrame(columns=['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'])
-    colunas_originais = df.columns.tolist()
-    col_placa = None
-    col_data_hora = None
-    col_latitude = None
-    col_longitude = None
+    df_raw = pd.read_excel(uploaded_file, dtype=str, header=None)
 
-    for col in colunas_originais:
-       col_lower = str(col).lower()
-       col_normalizada = unicodedata.normalize('NFKD', col_lower).encode('ASCII', 'ignore').decode('ASCII')
-       if not col_placa:
-           for i, valor in df[col].dropna().head(10).items():
-               if verificar_placa(str(valor)):
-                   col_placa = col
-                   break
-       if any(termo in col_normalizada for termo in ['data/hora - gps', 'data posicao', 'data hora', 'data-hora', 'datahora', 'data_gps', 'data_gps_posicao']):
-           col_data_hora = col
-       if any(termo in col_normalizada for termo in ['latitude', 'lat']):
-           col_latitude = col
-       if any(termo in col_normalizada for termo in ['longitude', 'lon', 'long']):
-           col_longitude = col
+    placa_detectada = None
+    for i in range(15):
+        for val in df_raw.iloc[i].dropna().astype(str):
+            if verificar_placa(val):
+                placa_detectada = formatar_placa(val)
+                break
+        if placa_detectada:
+            break
 
-    with st.expander("Ver colunas detectadas no arquivo:"):
-        colunas_formatadas = ", ".join([f"`{col}`" for col in df.columns.tolist()])
-        st.markdown(colunas_formatadas)
+    header_row = None
+    for idx, row in df_raw.iterrows():
+        row_str = row.astype(str).str.lower()
+        if row_str.str.contains("data").any() and row_str.str.contains("longitude").any():
+            header_row = idx
+            break
 
+    if header_row is None:
+        st.error("Cabeçalho com 'data' e 'longitude' não encontrado.")
+        return None, None, 0
 
-    for col in df.columns:
-        col_str = str(col).lower()
-        col_norm = unicodedata.normalize('NFKD', col_str).encode('ASCII', 'ignore').decode('ASCII')
+    df = pd.read_excel(uploaded_file, dtype=str, header=header_row)
+    df = df.dropna(how="all")
 
-        if not col_placa:
-            for _, valor in df[col].dropna().head(10).items():
-                if verificar_placa(str(valor)):
-                    col_placa = col
-                    break
+    col_data = next((c for c in df.columns if "data" in str(c).lower()), None)
+    col_lat = next((c for c in df.columns if "lat" in str(c).lower()), None)
+    col_lon = next((c for c in df.columns if "lon" in str(c).lower()), None)
 
-        if any(p in col_norm for p in ["datahora", "data_hora", "data posicao", "data/hora", "data gps", "data-hora", "horario"]):
-            col_data_hora = col
-        if any(p in col_norm for p in ["latitude", "lat", "gps_lat", "coordenada x"]):
-            col_latitude = col
-        if any(p in col_norm for p in ["longitude", "lon", "long", "gps_lon", "coordenada y"]):
-            col_longitude = col
+    if not all([col_data, col_lat, col_lon]):
+        st.error("Colunas obrigatórias não foram encontradas na planilha.")
+        return None, None, 0
 
-    if not col_placa:
-        st.warning(f"Nenhuma coluna de placa foi encontrada no arquivo {uploaded_file.name}.")
-        placa_usuario = st.text_input(f"Digite a placa para adicionar ao arquivo {uploaded_file.name}:")
-        if not placa_usuario or not verificar_placa(placa_usuario):
-            st.error("Placa inválida. Por favor, insira uma placa válida.")
-            return None, extensao, 0
-        col_placa = "placa_usuario"
-        df[col_placa] = placa_usuario
-
-    linhas_validas = 0
+    novo_df = pd.DataFrame(columns=['Placa', 'Data Original', 'Data Formatada', 'Latitude', 'Longitude', 'Código Empresa'])
     for _, row in df.iterrows():
-        placa = str(row[col_placa]) if col_placa in row else ""
-        if not verificar_placa(placa):
-            continue
-        placa_formatada = formatar_placa(placa)
-        data_formatada = ""
-        if col_data_hora and col_data_hora in row:
-            data_raw = row[col_data_hora]
-            data_formatada = formatar_data(data_raw) if data_raw else ""
-        latitude = processar_coordenada(row[col_latitude]) if col_latitude and col_latitude in row else ""
-        longitude = processar_coordenada(row[col_longitude]) if col_longitude and col_longitude in row else ""
-
-        novo_df.loc[linhas_validas] = [
-            placa_formatada,
-            data_formatada,
-            data_formatada,
-            "",
-            "",
-            latitude,
-            longitude,
-            codigo_empresa,
-            0
+        data = row.get(col_data, "")
+        data_fmt = formatar_data(data)
+        latitude = processar_coordenada(row.get(col_lat, ""))
+        longitude = processar_coordenada(row.get(col_lon, ""))
+        novo_df.loc[len(novo_df)] = [
+            placa_detectada or "", data, data_fmt, latitude, longitude, codigo_empresa
         ]
-        linhas_validas += 1
 
     registrar_edicao_planilha(usuario, uploaded_file.name)
     adicionar_ao_historico(usuario, f"Editou a planilha {uploaded_file.name} com código da empresa {codigo_empresa}")
-    return novo_df, extensao, linhas_validas
+    return novo_df, ".xlsx", len(novo_df)
 
 def planilha_editor(usuario):
     st.subheader("Editor de Planilhas")
     codigo_empresa = st.text_input("Código da empresa:")
-    uploaded_files = st.file_uploader("Selecione os arquivos de planilha (xlsx, xls, csv)", type=["xlsx", "xls", "csv"], accept_multiple_files=True)
+    uploaded_files = st.file_uploader("Selecione os arquivos de planilha (xlsx, xls, csv)", type=["xlsx", "xls"], accept_multiple_files=True)
 
     if uploaded_files and codigo_empresa:
         if st.button("Processar Arquivos"):
@@ -184,14 +134,14 @@ def planilha_editor(usuario):
                     progresso.progress(i / len(uploaded_files))
                     novo_df, extensao, linhas_validas = processar_planilha(uploaded_file, codigo_empresa, usuario)
                     output = io.StringIO()
-                    novo_df.to_csv(output, index=False, header=False, quoting=csv.QUOTE_MINIMAL)
+                    novo_df.to_csv(output, index=False, header=True, quoting=csv.QUOTE_MINIMAL)
                     nome_saida = uploaded_file.name.rsplit('.', 1)[0] + ".csv"
                     arquivos_csv.append({"nome": nome_saida, "conteudo": output.getvalue()})
                     resultados.append({"nome_original": uploaded_file.name, "nome_saida": nome_saida, "linhas_validas": linhas_validas})
                     st.write(f"### Pré-visualização: {uploaded_file.name}")
                     st.dataframe(novo_df.head(10))
                 except Exception as e:
-                    st.error(f"Erro ao processar {uploaded_file.name}")
+                    st.error(f"Erro ao processar {uploaded_file.name}: {e}")
 
             progresso.progress(1.0)
             if resultados:
