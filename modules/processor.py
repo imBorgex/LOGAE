@@ -51,27 +51,37 @@ def processar_planilha(uploaded_file, codigo_empresa, usuario):
     def processar_coordenada(valor):
         try:
             texto = str(valor).strip()
+            texto = texto.replace(",",".")
             if re.match(r'^-?\d+(?:[.,]\d+)?$', texto):
-                valor = float(texto.replace(",", "."))
+                valor = float(texto)
                 if abs(valor) > 1000:
-                    valor /= 1_000_000
+                    valor /= 1_000000
                 if -90 <= valor <= 90 or -180 <= valor <= 180:
                     return f"{valor:.6f}"
+                
             dms_match = re.search(
-                r"(\d{1,3})[°º\s]*['′´ ]?(\d{1,2})['’′´ ]?(\d{1,2})[\"”″ ]*\s*(Norte|Sul|Leste|Oeste)?",
+                r"(\d{1,3})[°º\s]*['′´]?\s*(\d{1,2})['′´]?\s*(\d{1,2}(?:\.\d+)?)?['\"”″]*\s*(Norte|Sul|Leste|Oeste)?",
                 texto, flags=re.IGNORECASE)
+
             if dms_match:
                 graus = int(dms_match.group(1))
                 minutos = int(dms_match.group(2))
-                segundos = int(dms_match.group(3))
-                direcao = (dms_match.group(4) or "").strip().lower()
-                decimal = graus + minutos / 60 + segundos / 3600
+                segundos = float(dms_match.group(3)) if dms_match.group(3) else 0.0
+                direcao_raw = dms_match.group(4)
+                direcao = direcao_raw.strip().lower() if direcao_raw else ""
+
+                decimal = graus + (minutos / 60) + (segundos / 3600)
+
                 if direcao in ["sul", "oeste"]:
-                    decimal *= -1
-                return f"{decimal:.6f}"
+                    decimal = -abs(decimal)
+                else:
+                    decimal = abs(decimal)
+
+                return f"-{decimal:.6f}"
         except:
             pass
-        return ""
+
+        return texto
 
     def formatar_placa(placa):
         if not isinstance(placa, str): return ""
@@ -175,7 +185,7 @@ def planilha_editor(usuario):
                     if novo_df is None:
                         continue
                     output = io.StringIO()
-                    novo_df.to_csv(output, index=False, header=True, sep=";", quoting=csv.QUOTE_MINIMAL)
+                    novo_df.to_csv(output, index=False, header=False, sep=";", quoting=csv.QUOTE_MINIMAL)
                     nome_saida = uploaded_file.name.rsplit('.', 1)[0] + ".csv"
                     arquivos_csv.append({"nome": nome_saida, "conteudo": output.getvalue()})
                     resultados.append({"nome_original": uploaded_file.name, "nome_saida": nome_saida, "linhas_validas": linhas_validas})
