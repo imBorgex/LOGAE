@@ -69,18 +69,14 @@ def processar_planilha(uploaded_file, codigo_empresa, usuario):
                 segundos = float(dms_match.group(3)) if dms_match.group(3) else 0.0
                 direcao_raw = dms_match.group(4)
                 direcao = direcao_raw.strip().lower() if direcao_raw else ""
-
                 decimal = graus + (minutos / 60) + (segundos / 3600)
-
                 if direcao in ["sul", "oeste"]:
                     decimal = -abs(decimal)
                 else:
                     decimal = abs(decimal)
-
                 return f"-{decimal:.6f}"
         except:
             pass
-
         return texto
 
     def formatar_placa(placa):
