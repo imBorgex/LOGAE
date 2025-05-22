@@ -8,12 +8,10 @@ from modules.data_handler import carregar_dados
 st.set_page_config(page_title="Sistema de Planilha - Logae", layout="wide")
 st.title("Sistema de Planilha - Logae")
 
-# Inicializa a sessão
 if "usuario_logado" not in st.session_state:
     st.session_state.usuario_logado = None
     st.session_state.nivel_acesso = None
 
-# Tela de login
 if not st.session_state.usuario_logado:
     login_screen()
 else:

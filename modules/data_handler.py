@@ -49,7 +49,6 @@ def salvar_dados(dados):
     except:
         return False
 def adicionar_ao_historico(usuario, acao):
-    """Adiciona uma entrada ao histórico do usuário com data e ação"""
     try:
         dados = carregar_dados()
         if "usuarios" in dados and usuario in dados["usuarios"]:
