@@ -51,7 +51,7 @@ def processar_planilha(uploaded_file, codigo_empresa, usuario):
     def processar_coordenada(valor):
         try:
             texto = str(valor).strip()
-            texto = texto.replace(",",".")
+            texto = texto.replace(".",",")
             if re.match(r'^-?\d+(?:[.,]\d+)?$', texto):
                 valor = float(texto)
                 if abs(valor) > 1000:
@@ -74,7 +74,7 @@ def processar_planilha(uploaded_file, codigo_empresa, usuario):
                     decimal = -abs(decimal)
                 else:
                     decimal = abs(decimal)
-                return f"-{decimal:.6f}"
+                return f"{decimal:.6f}"
         except:
             pass
         return texto
@@ -87,10 +87,22 @@ def processar_planilha(uploaded_file, codigo_empresa, usuario):
     try:
         is_csv = uploaded_file.name.lower().endswith(".csv")
         if is_csv:
-            df_raw = pd.read_csv(uploaded_file, dtype=str, header=None, sep=";", encoding="utf-8", engine="python")
+            raw = uploaded_file.read()
+            uploaded_file.seek(0)
+            for encoding in ["utf-8", "latin1", "iso-8859-1"]:
+                try:
+                    amostra = raw[:2048].decode(encoding, errors='ignore')
+                    sep = csv.Sniffer().sniff(amostra).delimiter
+                    uploaded_file.seek(0)
+                    df_raw = pd.read_csv(uploaded_file, dtype=str, header=None, sep=sep, encoding=encoding, engine="python")
+                    break
+                except Exception:
+                    uploaded_file.seek(0)
+            else:
+                return None, "", 0
         else:
             xls = pd.ExcelFile(uploaded_file)
-            df_raw = pd.read_excel(uploaded_file, sheet_name=0, dtype=str, header=None)
+            df_raw = pd.read_excel(xls, sheet_name=0, dtype=str, header=None)
         df_raw.fillna('', inplace=True)
     except:
         return None, "", 0
@@ -132,7 +144,8 @@ def processar_planilha(uploaded_file, codigo_empresa, usuario):
 
     try:
         if is_csv:
-            df = pd.read_csv(uploaded_file, dtype=str, header=linha_cabecalho, sep=";", encoding="utf-8", engine="python")
+            uploaded_file.seek(0)
+            df = pd.read_csv(uploaded_file, dtype=str, header=linha_cabecalho, sep=sep, encoding=encoding, engine="python")
         else:
             df = pd.read_excel(xls, sheet_name=0, header=linha_cabecalho, dtype=str)
         df.fillna('', inplace=True)
@@ -146,12 +159,10 @@ def processar_planilha(uploaded_file, codigo_empresa, usuario):
             col_lat = col
         if not col_lon and 'lon' in nome:
             col_lon = col
-        if not col_data and any(p in nome for p in ['data', 'hora', 'posicao']):
+        if not col_data and any(p in nome for p in ['data','hora', 'posicao', 'evento','dh', 'gps']):
             col_data = col
 
-    if not (col_lat and col_lon and col_data):
-        return None, "", 0
-
+    final_df = pd.DataFrame(columns=['A', 'B', 'C', 'D', 'E', 'F'])
     for _, row in df.iterrows():
         placa = formatar_placa(placa_detectada)
         data = formatar_data(row.get(col_data, ""))
@@ -169,10 +180,16 @@ def planilha_editor(usuario):
     codigo_empresa = st.text_input("Código da empresa:")
     uploaded_files = st.file_uploader("Selecione os arquivos de planilha", type=["xlsx", "xls", "csv"], accept_multiple_files=True)
 
+    if 'arquivos_processados' not in st.session_state:
+        st.session_state.arquivos_processados = []
+    if 'resultados' not in st.session_state:
+        st.session_state.resultados = []
+
     if uploaded_files and codigo_empresa:
         if st.button("Processar Arquivos"):
             progresso = st.progress(0)
-            resultados, arquivos_csv = [], []
+            arquivos_csv = []
+            resultados = []
 
             for i, uploaded_file in enumerate(uploaded_files):
                 try:
@@ -183,27 +200,46 @@ def planilha_editor(usuario):
                     output = io.StringIO()
                     novo_df.to_csv(output, index=False, header=False, sep=";", quoting=csv.QUOTE_MINIMAL)
                     nome_saida = uploaded_file.name.rsplit('.', 1)[0] + ".csv"
-                    arquivos_csv.append({"nome": nome_saida, "conteudo": output.getvalue()})
-                    resultados.append({"nome_original": uploaded_file.name, "nome_saida": nome_saida, "linhas_validas": linhas_validas})
-                    st.write(f"### Pré-visualização: {uploaded_file.name}")
-                    st.dataframe(novo_df.head(10))
+                    arquivos_csv.append({
+                        "nome": nome_saida,
+                        "conteudo": output.getvalue(),
+                        "preview": novo_df.head(10)
+                    })
+                    resultados.append({
+                        "nome_original": uploaded_file.name,
+                        "nome_saida": nome_saida,
+                        "linhas_validas": linhas_validas
+                    })
                 except Exception as e:
                     st.error(f"Erro ao processar {uploaded_file.name}: {e}")
 
             progresso.progress(1.0)
-            if resultados:
-                st.success(f"{len(resultados)} arquivos processados com sucesso.")
-                st.dataframe(pd.DataFrame(resultados))
-                for idx, arq in enumerate(arquivos_csv):
-                    if st.download_button(f"Baixar {arq['nome']}", arq['conteudo'], arq['nome'], "text/csv", key=idx):
-                        registrar_download_planilha(usuario, arq['nome'])
-                if len(arquivos_csv) > 1:
-                    zip_buffer = io.BytesIO()
-                    with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
-                        for arq in arquivos_csv:
-                            zip_file.writestr(arq['nome'], arq['conteudo'])
-                    if st.download_button("Baixar tudo (ZIP)", zip_buffer.getvalue(), "planilhas.zip", "application/zip"):
-                        for arq in arquivos_csv:
-                            registrar_download_planilha(usuario, arq['nome'])
-            else:
-                st.warning("Nenhum arquivo foi processado com sucesso.")
+            st.session_state.arquivos_processados = arquivos_csv
+            st.session_state.resultados = resultados
+
+    # Interface após processamento
+    if st.session_state.arquivos_processados:
+        st.success(f"{len(st.session_state.arquivos_processados)} arquivos processados com sucesso.")
+        st.dataframe(pd.DataFrame(st.session_state.resultados))
+
+        nomes_arquivos = [arq["nome"] for arq in st.session_state.arquivos_processados]
+        nome_selecionado = st.selectbox("Escolha um arquivo para visualizar", nomes_arquivos)
+        for arq in st.session_state.arquivos_processados:
+            if arq["nome"] == nome_selecionado:
+                st.dataframe(arq["preview"])
+
+        for idx, arq in enumerate(st.session_state.arquivos_processados):
+            if st.download_button(f"Baixar {arq['nome']}", arq['conteudo'], arq['nome'], "text/csv", key=idx):
+                registrar_download_planilha(usuario, arq['nome'])
+
+        if len(st.session_state.arquivos_processados) > 1:
+            zip_buffer = io.BytesIO()
+            with zipfile.ZipFile(zip_buffer, 'a', zipfile.ZIP_DEFLATED, False) as zip_file:
+                for arq in st.session_state.arquivos_processados:
+                    zip_file.writestr(arq['nome'], arq['conteudo'])
+            if st.download_button("Baixar tudo (ZIP)", zip_buffer.getvalue(), "planilhas.zip", "application/zip"):
+                for arq in st.session_state.arquivos_processados:
+                    registrar_download_planilha(usuario, arq['nome'])
+    else:
+        st.info("Envie arquivos e clique em 'Processar Arquivos' para começar.")
+
